@@ -1,0 +1,6 @@
+(setq inhibit-startup-screen t)
+(setq standard-indent 4)
+(menu-bar-mode 0)
+(tool-bar-mode 0)
+(scroll-bar-mode 0)
+(global-display-line-numbers-mode)

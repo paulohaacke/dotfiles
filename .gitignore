@@ -1,0 +1,24 @@
+# Nix build artifacts
+result
+result-*
+
+# Emacs backup and autosave files
+*~
+\#*\#
+.\#*
+*.elc
+auto-save-list/
+
+# Neovim / Vim swap and undo files
+*.swp
+*.swo
+*.swn
+.netrwhist
+
+# Direnv and local environment overrides
+.direnv/
+.envrc.local
+
+# Operating system metadata
+.DS_Store
+Thumbs.db
