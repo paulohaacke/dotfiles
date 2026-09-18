@@ -2,8 +2,11 @@
 
 let
   dotfilesDir = "${config.home.homeDirectory}/dotfiles";
-  emacsPkg = pkgs.emacs-pgtk;
+  emacsPkg = config.programs.emacs.finalPackage;
   emacsDir  = "${config.home.homeDirectory}/.config/emacs";
+  emacsLaunch = pkgs.writeShellScript "emacs-launch"
+    (builtins.replaceStrings [ "@emacs@" ] [ "${emacsPkg}" ]
+      (builtins.readFile ./emacs-launch.sh));
   doomDir   = "${config.home.homeDirectory}/.config/doom";
   doomBin   = "${emacsDir}/bin/doom";
   stampFile = "${config.xdg.dataHome}/doom-nix/sync.stamp";
@@ -13,10 +16,9 @@ let
     builtins.readFile ./doom/init.el
     + builtins.readFile ./doom/packages.el
   );
-  doomPath = lib.makeBinPath (with pkgs; [
-    emacsPkg git ripgrep fd coreutils gnutls
-    gnugrep gnused gawk findutils bash
-  ]);
+  doomPath = lib.makeBinPath ([ emacsPkg ] ++ (with pkgs; [
+    git ripgrep fd coreutils gnutls bash
+  ]));
 in
 {
   # Out-of-store symlink: ~/.config/doom points at the real repo directory, so
@@ -24,6 +26,16 @@ in
   # Swap for `xdg.configFile."doom".source = ./doom;` if you would rather have
   # it immutable in the Nix store (then every edit needs a rebuild).
   xdg.configFile."doom".source = config.lib.file.mkOutOfStoreSymlink "${dotfilesDir}/modules/emacs/doom";
+
+  xdg.desktopEntries.emacsclient-nix = {
+    name = "Emacs";
+    exec = "${emacsLaunch} %F";
+    icon = "emacs";
+    terminal = false;
+    categories = [ "Development" "TextEditor" ];
+    mimeType = [ "text/plain" "text/x-org" "inode/directory" ];
+    settings.StartupWMClass = "Emacs";
+  };
 
   home.sessionPath = [ "${emacsDir}/bin" ];
 
@@ -33,8 +45,6 @@ in
   };
 
   home.packages = with pkgs; [
-    emacsPkg
-
     # Required by Doom
     git
     ripgrep
@@ -77,6 +87,14 @@ in
     client.enable = true;
     defaultEditor = true;
     socketActivation.enable = true;
+  };
+
+  programs.emacs = {
+    enable = true;
+    package = pkgs.emacs-pgtk;
+    extraPackages = epkgs: with epkgs; [
+      vterm
+    ];
   };
 
   # Bootstrap and sync Doom automatically

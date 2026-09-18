@@ -6,7 +6,9 @@
 ;; NOTE: these are fetched by straight.el at `doom sync' time, NOT by Nix.
 ;; That is the tradeoff of this setup: your config is declarative, but package
 ;; versions are resolved at sync time rather than pinned by flake.lock.
- 
+
+(package! vterm :built-in 'prefer)
+
 ;; AI: chat + inline assistance, supports Claude among other backends.
 (package! gptel)
  

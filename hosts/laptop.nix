@@ -6,6 +6,7 @@
   home.stateVersion = "24.05";
 
   imports = [
+    ../modules/nix
     ../modules/identity
     ../modules/core
     ../modules/git
