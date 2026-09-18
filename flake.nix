@@ -9,16 +9,28 @@
     };
   };
 
-  outputs = { nixpkgs, home-manager, ... }: 
+  outputs = inputs@{ nixpkgs, home-manager, ... }:
     let
-      system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
-    in {
-      homeConfigurations."paulo" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
-        modules = [ 
-          ./hosts/laptop.nix 
+    mkPkgs = system: import nixpkgs {
+      inherit system;
+      config.allowUnfreePredicate = pkg:
+        builtins.elem (nixpkgs.lib.getName pkg) [
+        "terraform"
         ];
-      };
     };
+
+  mkHome = { system ? "x86_64-linux", host }:
+    home-manager.lib.homeManagerConfiguration {
+      pkgs = mkPkgs system;
+
+      extraSpecialArgs = { inherit inputs; };
+
+      modules = [ ./hosts/${host}.nix ];
+    };
+  in {
+    homeConfigurations = {
+      "paulo@laptop" = mkHome { host = "laptop"; };
+      # "paulo@work" = mkHome { host = "work"; };
+    };
+  };
 }
