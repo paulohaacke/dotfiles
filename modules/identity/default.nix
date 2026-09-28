@@ -2,6 +2,8 @@
 
 let
   inherit (lib) mkOption types mapAttrsToList;
+  emailSources = id:
+    builtins.filter (x: x != null) [ id.email id.includeFile id.secret ];
 in
 {
   options.my = {
@@ -14,7 +16,6 @@ in
             type = types.str;
             description = ''
               Not secret - it appears in every commit you author anyway.
-              Kept in plaintext so the host file stays readable.
             '';
           };
 
@@ -22,8 +23,22 @@ in
             type = types.nullOr types.str;
             default = null;
             description = ''
-              Plaintext email, for identities you do not mind committing.
-              Mutually exclusive with `secret`.
+              Plaintext email, committed to this repo. Only for addresses you
+              do not mind publishing.
+            '';
+          };
+
+          includeFile = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "~/.config/git/work-identity";
+            description = ''
+              Path to a hand-written gitconfig fragment that exists only on
+              this machine and is never committed. Git reads it at runtime,
+              so the email stays out of the repo without needing sops.
+
+              If the file is missing, git skips it silently and the default
+              identity applies instead. Create it before committing there.
             '';
           };
 
@@ -32,15 +47,10 @@ in
             default = null;
             example = "git/work";
             description = ''
-              Name of a sops secret holding a gitconfig fragment for this
-              identity. The fragment is read by git at runtime, so its
-              contents never enter Nix evaluation.
-
-              Put `[user] email` and any `[core] sshCommand` inside the
-              encrypted fragment - the `sshKey` option below is only for
-              plaintext identities.
-
-              Mutually exclusive with `email`.
+              Name of a sops secret holding a gitconfig fragment - the same
+              idea as `includeFile`, but encrypted inside the repo.
+              Requires sops-nix, which is not set up yet: using this option
+              fails evaluation until it is.
             '';
           };
 
@@ -58,7 +68,10 @@ in
           sshKey = mkOption {
             type = types.nullOr types.str;
             default = null;
-            description = "Only for plaintext identities; see `secret`.";
+            description = ''
+              Path to the SSH key for this identity. Only the path is stored,
+              so it is safe to commit, and it works with any email source.
+            '';
           };
         };
       });
@@ -76,8 +89,11 @@ in
       message = "my.defaultIdentity refers to an identity that is not defined.";
     }]
     ++ mapAttrsToList (n: id: {
-      # XOR: exactly one of the two forms.
-      assertion = (id.email == null) != (id.secret == null);
-      message = "my.identities.${n}: set exactly one of `email` or `secret`.";
+      assertion = builtins.length (emailSources id) == 1;
+      message = "my.identities.${n}: set exactly one of `email`, `includeFile` or `secret`.";
+    }) config.my.identities
+    ++ mapAttrsToList (n: id: {
+      assertion = id.email != "";
+      message = "my.identities.${n}.email is empty. Use `includeFile` to keep an address out of the repo.";
     }) config.my.identities;
 }

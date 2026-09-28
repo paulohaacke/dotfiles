@@ -11,10 +11,12 @@ let
   mkIncludes = id: condition:
     let cond = if condition == null then { } else { inherit condition; };
     in
-      optionals (id.secret != null)
-        [ (cond // { path = secretPath id.secret; }) ]
-      ++ optionals (id.email != null)
+      optionals (id.email != null)
         [ (cond // { contents.user = { name = id.fullName; email = id.email; }; }) ]
+      ++ optionals (id.includeFile != null)
+        [ (cond // { path = id.includeFile; }) ]
+      ++ optionals (id.secret != null)
+        [ (cond // { path = secretPath id.secret; }) ]
       ++ optionals (id.sshKey != null)
         [ (cond // { contents.core.sshCommand = "ssh -i ${id.sshKey}"; }) ];
 

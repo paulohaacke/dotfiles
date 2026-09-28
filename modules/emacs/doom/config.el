@@ -1,27 +1,29 @@
 ;;; config.el -*- lexical-binding: t; -*-
- 
-;; Personal identity, used by magit and org export.
+;;;
+;;; Lives at ~/.config/doom/config.el (out-of-store symlink).
+;;; Reload after editing with `SPC h r r' - no rebuild needed.
+
+;; Only used for #+AUTHOR in org export. Magit ignores it: commit authorship
+;; comes from git's own config, which modules/git generates.
 (setq user-full-name "Paulo Haacke")
- 
+
 ;;; --- Appearance ---------------------------------------------------------
- 
+
 (setq doom-theme 'doom-one
       display-line-numbers-type t)
- 
+
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 14))
- 
+
+(add-to-list 'default-frame-alist '(width . 140))
+(add-to-list 'default-frame-alist '(height . 45))
+
 ;;; --- Org ----------------------------------------------------------------
 ;; `org-directory' must be set here, BEFORE org loads. Everything else that
-;; configures org belongs inside `after!' blocks, which is why it lives in
-;; lisp/ph-org.el instead.
- 
-(setq org-directory "~/org/")
- 
-;;; --- Local modules ------------------------------------------------------
-;; `load!' is Doom's macro for loading a file relative to this one.
-;; Same modular idea as before: one concern per file, explicit load order.
- 
-;; (load! "lisp/ph-org")
-;; (load! "lisp/ph-points")   ; uncomment once written
-;; (load! "lisp/ph-ai")       ; gptel etc.
+;; configures org belongs inside `after!' blocks in lisp/ph-org.el.
 
+(setq org-directory "~/org/")
+
+;;; --- Local modules ------------------------------------------------------
+;; (load! "lisp/ph-org")
+;; (load! "lisp/ph-points")
+;; (load! "lisp/ph-ai")

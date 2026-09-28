@@ -1,9 +1,8 @@
 ;;; init.el -*- lexical-binding: t; -*-
 
-;; This file controls which Doom modules are enabled.
-;; After editing: run `doom sync` and restart Emacs.
-;; Press `SPC h d h' inside Emacs for Doom's own documentation,
-;; or put your cursor on a module below and press `K' to read about it.
+;; Lives at ~/.config/doom/init.el (out-of-store symlink).
+;; Editing this triggers `doom sync' on the next home-manager switch.
+;; Put the cursor on a module and press `K' to read its documentation.
 
 (doom! :input
        ;;bidi
@@ -17,12 +16,12 @@
 
        :ui
        doom                        ; the default look
-       doom-dashboard              ; startup screen
+       dashboard                   ; startup screen (doom-dashboard before 2.1)
        hl-todo                     ; highlight TODO/FIXME/NOTE
        indent-guides
        modeline
        ophints                     ; visual feedback on yank/delete
-       (popup +defaults)           ; the popup window manager you wanted
+       (popup +defaults)           ; popup window management
        vc-gutter                   ; git diff marks in the fringe
        vi-tilde-fringe
        workspaces                  ; per-project window layouts
@@ -41,7 +40,7 @@
        vc
 
        :term
-       vterm                       ; replaces your tmux panes
+       vterm                       ; replaces tmux panes
 
        :checkers
        syntax
