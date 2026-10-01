@@ -22,7 +22,8 @@
        modeline
        ophints                     ; visual feedback on yank/delete
        (popup +defaults)           ; popup window management
-       vc-gutter                   ; git diff marks in the fringe
+       treemacs
+       (vc-gutter +pretty)         ; git diff marks in the fringe
        vi-tilde-fringe
        workspaces                  ; per-project window layouts
 
@@ -31,21 +32,25 @@
        file-templates
        fold
        snippets
+       (whitespace +guess +trim)
        word-wrap
 
        :emacs
        dired
        electric
+       tramp
        undo
        vc
 
        :term
        vterm                       ; replaces tmux panes
+       ghostel
 
        :checkers
        syntax
 
        :tools
+       ansible
        direnv                      ; picks up per-project nix shells
        (eval +overlay)
        lookup
