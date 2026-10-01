@@ -129,7 +129,7 @@ in
       fi
     elif [ "$(cat "${stampFile}" 2>/dev/null || true)" != "${syncHash}" ]; then
       echo "doom: init.el or packages.el changed, syncing..."
-      if $DRY_RUN_CMD ${doomBin} sync; then
+      if $DRY_RUN_CMD ${doomBin} sync --no-env; then
         writeStamp
         restartDaemon
       else
