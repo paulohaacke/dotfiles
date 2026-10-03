@@ -9,29 +9,38 @@
     };
   };
 
-  outputs = inputs@{ nixpkgs, home-manager, ... }:
+  outputs =
+    inputs@{ nixpkgs, home-manager, ... }:
     let
-    mkPkgs = system: import nixpkgs {
-      inherit system;
-      config.allowUnfreePredicate = pkg:
-        builtins.elem (nixpkgs.lib.getName pkg) [
-          "terraform"
-          "claude-code"
-        ];
-    };
+      mkPkgs =
+        system:
+        import nixpkgs {
+          inherit system;
+          config.allowUnfreePredicate =
+            pkg:
+            builtins.elem (nixpkgs.lib.getName pkg) [
+              "terraform"
+              "claude-code"
+            ];
+        };
 
-  mkHome = { system ? "x86_64-linux", host }:
-    home-manager.lib.homeManagerConfiguration {
-      pkgs = mkPkgs system;
+      mkHome =
+        {
+          system ? "x86_64-linux",
+          host,
+        }:
+        home-manager.lib.homeManagerConfiguration {
+          pkgs = mkPkgs system;
 
-      extraSpecialArgs = { inherit inputs; };
+          extraSpecialArgs = { inherit inputs; };
 
-      modules = [ ./hosts/${host}.nix ];
+          modules = [ ./hosts/${host}.nix ];
+        };
+    in
+    {
+      homeConfigurations = {
+        "paulo@laptop" = mkHome { host = "laptop"; };
+        # "paulo@work" = mkHome { host = "work"; };
+      };
     };
-  in {
-    homeConfigurations = {
-      "paulo@laptop" = mkHome { host = "laptop"; };
-      # "paulo@work" = mkHome { host = "work"; };
-    };
-  };
 }

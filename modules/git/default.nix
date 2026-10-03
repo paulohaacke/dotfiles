@@ -1,24 +1,39 @@
 { config, lib, ... }:
 
 let
-  inherit (lib) filterAttrs concatMap attrValues optionals;
+  inherit (lib)
+    filterAttrs
+    concatMap
+    attrValues
+    optionals
+    ;
 
   ids = config.my.identities;
   defaultId = ids.${config.my.defaultIdentity};
 
   secretPath = name: config.sops.secrets.${name}.path;
 
-  mkIncludes = id: condition:
-    let cond = if condition == null then { } else { inherit condition; };
+  mkIncludes =
+    id: condition:
+    let
+      cond = if condition == null then { } else { inherit condition; };
     in
-      optionals (id.email != null)
-        [ (cond // { contents.user = { name = id.fullName; email = id.email; }; }) ]
-      ++ optionals (id.includeFile != null)
-        [ (cond // { path = id.includeFile; }) ]
-      ++ optionals (id.secret != null)
-        [ (cond // { path = secretPath id.secret; }) ]
-      ++ optionals (id.sshKey != null)
-        [ (cond // { contents.core.sshCommand = "ssh -i ${id.sshKey}"; }) ];
+    optionals (id.email != null) [
+      (
+        cond
+        // {
+          contents.user = {
+            name = id.fullName;
+            email = id.email;
+          };
+        }
+      )
+    ]
+    ++ optionals (id.includeFile != null) [ (cond // { path = id.includeFile; }) ]
+    ++ optionals (id.secret != null) [ (cond // { path = secretPath id.secret; }) ]
+    ++ optionals (id.sshKey != null) [
+      (cond // { contents.core.sshCommand = "ssh -i ${id.sshKey}"; })
+    ];
 
   scoped = attrValues (filterAttrs (_: id: id.directory != null) ids);
 in
@@ -32,7 +47,6 @@ in
     };
 
     includes =
-      mkIncludes defaultId null
-      ++ concatMap (id: mkIncludes id "gitdir:${id.directory}") scoped;
+      mkIncludes defaultId null ++ concatMap (id: mkIncludes id "gitdir:${id.directory}") scoped;
   };
 }
