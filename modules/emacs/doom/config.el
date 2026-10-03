@@ -8,9 +8,7 @@
 (setq user-full-name "Paulo Haacke")
 
 ;;; --- Appearance ---------------------------------------------------------
-
-(setq doom-theme 'doom-one
-      display-line-numbers-type t)
+(setq doom-theme 'doom-one display-line-numbers-type t)
 
 (setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 14))
 
@@ -22,6 +20,15 @@
 ;; configures org belongs inside `after!' blocks in lisp/ph-org.el.
 
 (setq org-directory "~/org/")
+
+;;; --- AI -----------------------------------------------------------------
+(use-package! claude-code-ide
+  :bind ("C-c C-'" . claude-code-ide-menu)
+  :init
+  (setq claude-code-ide-terminal-backend 'ghostel)
+  :config
+  ;; Let Claude use Emacs features (xref, project, diagnostics) over MCP.
+  (claude-code-ide-emacs-tools-setup))
 
 ;;; --- Local modules ------------------------------------------------------
 ;; (load! "lisp/ph-org")

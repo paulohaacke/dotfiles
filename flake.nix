@@ -15,7 +15,8 @@
       inherit system;
       config.allowUnfreePredicate = pkg:
         builtins.elem (nixpkgs.lib.getName pkg) [
-        "terraform"
+          "terraform"
+          "claude-code"
         ];
     };
 
