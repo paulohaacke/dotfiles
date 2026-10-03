@@ -19,6 +19,7 @@
        dashboard                   ; startup screen (doom-dashboard before 2.1)
        hl-todo                     ; highlight TODO/FIXME/NOTE
        indent-guides
+       minimap                     ; show a map of the code on the side
        modeline
        ophints                     ; visual feedback on yank/delete
        (popup +defaults)           ; popup window management
@@ -28,12 +29,13 @@
        workspaces                  ; per-project window layouts
 
        :editor
-       (evil +everywhere)          ; vim everywhere
-       file-templates
-       fold
-       snippets
-       (whitespace +guess +trim)
-       word-wrap
+       (evil +everywhere)        ; vim everywhere
+       file-templates            ; auto-snippets for empty files
+       fold                      ; (nigh) universal code folding
+       (format +onsave)          ; Enable formatting (optionally format on save)
+       snippets                  ; my elves. They type so I don't have to
+       (whitespace +guess +trim) ; a butler for your whitespace
+       word-wrap                 ; soft wrapping with language-aware indent
 
        :emacs
        dired
@@ -43,7 +45,7 @@
        vc
 
        :term
-       vterm                       ; replaces tmux panes
+       ;vterm                       ; replaces tmux panes
        ghostel
 
        :checkers
