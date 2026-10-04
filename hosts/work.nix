@@ -3,7 +3,7 @@
 {
   home.username = "paulo";
   home.homeDirectory = "/home/paulo";
-  home.stateVersion = "24.05";
+  home.stateVersion = "26.11";
 
   imports = [
     ../modules/bash
