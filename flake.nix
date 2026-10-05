@@ -21,6 +21,7 @@
             builtins.elem (nixpkgs.lib.getName pkg) [
               "terraform"
               "claude-code"
+              "antigravity-cli"
             ];
         };
 
@@ -40,7 +41,8 @@
     {
       homeConfigurations = {
         "paulo@laptop" = mkHome { host = "laptop"; };
-        # "paulo@work" = mkHome { host = "work"; };
+        "paulo@workRemote" = mkHome { host = "work"; };
+        "paulo@workHome" = mkHome { host = "work"; };
       };
     };
 }

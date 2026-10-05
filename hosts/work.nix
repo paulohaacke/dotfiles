@@ -6,7 +6,7 @@
   home.stateVersion = "26.11";
 
   imports = [
-    ../modules/bash
+    #../modules/bash
     ../modules/nix
     ../modules/identity
     ../modules/core
@@ -32,7 +32,7 @@
     personal = {
       fullName = "Paulo Haacke";
       email = "paulohaacke@gmail.com";
-      directory = "~/work/";
+      directory = "~/personal/";
     };
   };
 
