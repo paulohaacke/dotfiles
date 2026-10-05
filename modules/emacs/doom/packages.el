@@ -8,8 +8,8 @@
 ;; versions are resolved at sync time rather than pinned by flake.lock.
 
 ;; AI
-(package! claude-code-ide
-  :recipe (:host github :repo "manzaltu/claude-code-ide.el"))
+(package! claude-code-ide :recipe (:host github :repo "manzaltu/claude-code-ide.el"))
+(package! ai-code :recipe (:host github :repo "tninja/ai-code-interface.el"))
 
 ;; Uncomment when you set up the bibliography workflow for the thesis:
 ;; (package! org-roam-bibtex)

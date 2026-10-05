@@ -29,6 +29,12 @@
   :config
   ;; Let Claude use Emacs features (xref, project, diagnostics) over MCP.
   (claude-code-ide-emacs-tools-setup))
+(use-package! ai-code
+  :commands (ai-code-menu)
+  :config
+  (setq ai-code-backends-infra-terminal-backend 'ghostel)
+  (ai-code-set-backend 'antigravity))
+(map! :leader :desc "AI code menu" "j a" #'ai-code-menu)
 
 ;;; --- Local modules ------------------------------------------------------
 ;; (load! "lisp/ph-org")
