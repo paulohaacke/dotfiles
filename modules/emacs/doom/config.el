@@ -15,6 +15,11 @@
 (add-to-list 'default-frame-alist '(width . 140))
 (add-to-list 'default-frame-alist '(height . 45))
 
+;; emacsclient frames reopen the last-used workspace with its saved layout
+(after! persp-mode
+  (setq persp-emacsclient-init-frame-behaviour-override t
+        persp-interactive-init-frame-behaviour-override t))
+
 ;;; --- Org ----------------------------------------------------------------
 ;; `org-directory' must be set here, BEFORE org loads. Everything else that
 ;; configures org belongs inside `after!' blocks in lisp/ph-org.el.
