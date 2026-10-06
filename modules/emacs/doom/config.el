@@ -37,8 +37,13 @@
 (use-package! ai-code
   :commands (ai-code-menu)
   :config
+  (ai-code-set-backend 'antigravity)
   (setq ai-code-backends-infra-terminal-backend 'ghostel)
-  (ai-code-set-backend 'antigravity))
+  (setq ai-code-auto-test-type 'ask-me)
+  (global-auto-revert-mode 1)
+  (setq auto-revert-interval 1)
+  (with-eval-after-load 'magit
+    (ai-code-magit-setup-transients)))
 (map! :leader :desc "AI code menu" "j a" #'ai-code-menu)
 
 ;;; --- Local modules ------------------------------------------------------
