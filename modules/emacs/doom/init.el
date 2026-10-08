@@ -53,24 +53,39 @@
 
        :tools
        ansible
+       debugger
        direnv                      ; picks up per-project nix shells
+       docker
        (eval +overlay)
        lookup
        lsp
        magit
+       make
        pdf
+       terraform                   ; IaC
        tree-sitter
+
+       :os
+       tty
 
        :lang
        emacs-lisp
+       (go +lsp)
+       (graphql +lsp)
        (json +lsp)
+       (java +lsp)
+       javascript
+       julia
+       kotlin
        latex                       ; thesis writing
+       lua
        markdown
        nix
+       ocaml
        (org +roam2 +pretty +dragndrop)   ; +roam2 is the zettelkasten layer
+       php
        (python +lsp +pyright)
        (sh +lsp)
-       terraform                   ; IaC
        (yaml +lsp)
 
        :config
